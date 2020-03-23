@@ -85,7 +85,7 @@ Now that you have completed your initial analysis, design a Flask API based on t
   * Return the JSON representation of your dictionary.
 
 * `/api/v1.0/stations`
-
+d
   * Return a JSON list of stations from the dataset.
 
 * `/api/v1.0/tobs`
@@ -93,6 +93,8 @@ Now that you have completed your initial analysis, design a Flask API based on t
   * Return a JSON list of Temperature Observations (tobs) for the previous year.
 
 * `/api/v1.0/<start>` and `/api/v1.0/<start>/<end>`
+* Create two parameters "start=none" and "end=none"
+* Will always have start date, not always end date. This is where we are using the final query. 
 
   * Return a JSON list of the minimum temperature, the average temperature, and the max temperature for a given start or start-end range.
 

@@ -49,10 +49,26 @@ def hawai_stations():
 
 @app.route("/api/v1.0/tobs")
 def hawai_tobs():
-    start_date = dt.date(2016, 8, 23)
-    end_date = dt.date(2017, 8, 23)
-    tobs = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).filter(Measurement.date >= start_date).filter(Measurement.date <= end_date).all()
-    return jsonify(tobs)
+    tobs = session.query(Measurement.date, Measurement.tobs).filter(Measurement.date >= dt.date(2016, 8, 23)).order_by(Measurement.date)
+    temperature = {
+        date: temperature for date, temperature in tobs
+    }
+    return(jsonify(temperature))
+
+@app.route("/api/v1.0/<start>")
+@app.route("/api/v1.0/<start>/<end>")
+def tobs_start(start=None, end=None):
+    select = [func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)]
+    if not end:
+        
+        tobs = session.query(*select).filter(Measurement.date >= start).all()
+        tobs = list(np.ravel(tobs))
+        return(jsonify(tobs))
+
+    tobs = session.query(*select).filter(Measurement.date >= start).filter(Measurement.date <= end).all()
+    tobs = list(np.ravel(tobs))
+    return(jsonify(tobs))
+    
 
 
 if __name__ == "__main__":
